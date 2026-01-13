@@ -29,19 +29,19 @@ public final class Name {
         final char firstInitial;
         final char lastInitial;
 
-        firstInitial = Character.toUpperCase(first.charAt(0));
-        lastInitial = Character.toUpperCase(last.charAt(0));
+        firstInitial = Character.toUpperCase(getFirst().charAt(0));
+        lastInitial = Character.toUpperCase(getLast().charAt(0));
 
         return firstInitial + "." + lastInitial + ".";
     }
 
     public String getFullName(){
+        // Z iad M alik
         final String firstFormatted;
         final String lastFormatted;
 
-        firstFormatted = getFirst().charAt(0) + first.substring(1).toLowerCase();
-        lastFormatted = getFirst().charAt(2) + last.substring(1).toLowerCase();
-
+        firstFormatted = getInitials().charAt(0) + first.substring(1).toLowerCase();
+        lastFormatted = getInitials().charAt(2) + last.substring(1).toLowerCase();
 
         return firstFormatted + " " + lastFormatted;
     }
@@ -66,8 +66,6 @@ public final class Name {
         reversedLast = builderLast.toString();
 
         return reversedLast + " " + reversedFirst;
-
-
     }
 
     /**
