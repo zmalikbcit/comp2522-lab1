@@ -1,205 +1,142 @@
 package ca.bcit.comp2522.bank;
 
 /**
- * Represents a bank account with balance, PIN protection, and transaction capabilities.
+ * Represents a bank client with personal information and account details.
  *
  * @author Ziad Malik
  * @version 1.0
  */
-public class BankAccount {
-    private final BankClient client;
-    private double balanceUsd;
-    private final int pin;
-    private final String accountNumber;
-    private final Date accountOpened;
-    private final Date accountClosed;
+public class BankClient {
+    private final Name name;
+    private final Date dateBorn;
+    private final Date dateDied;
+    private final String clientId;
+    private final Date signupDate;
 
-    private static final int MIN_ACCOUNT_NUMBER_LENGTH = 6;
-    private static final int MAX_ACCOUNT_NUMBER_LENGTH = 7;
-    private static final int MIN_PIN = 1000;
-    private static final int MAX_PIN = 9999;
+    private static final int MIN_CLIENT_ID_LENGTH = 6;
+    private static final int MAX_CLIENT_ID_LENGTH = 7;
 
     /**
-     * Constructs a BankAccount with the specified information.
+     * Constructs a BankClient with the specified information.
      *
-     * @param client the bank client who owns this account
-     * @param balanceUsd the initial balance in USD
-     * @param pin the 4-digit PIN for the account
-     * @param accountNumber the account number (must be 6 or 7 characters)
-     * @param accountOpened the date the account was opened
-     * @param accountClosed the date the account was closed (can be null if still open)
-     * @throws IllegalArgumentException if any parameter is invalid
+     * @param name the client's name
+     * @param dateBorn the client's birthdate
+     * @param dateDied the client's death date (can be null if alive)
+     * @param clientId the client ID (must be 6 or 7 characters)
+     * @param signupDate the date the client signed up
+     * @throws IllegalArgumentException if name or dateBorn is null, or if clientId is invalid
      */
-    public BankAccount(final BankClient client,
-                       final double balanceUsd,
-                       final int pin,
-                       final String accountNumber,
-                       final Date accountOpened,
-                       final Date accountClosed) {
-        validateBankAccount(client, balanceUsd, pin, accountNumber, accountOpened);
-        this.client = client;
-        this.balanceUsd = balanceUsd;
-        this.pin = pin;
-        this.accountNumber = accountNumber;
-        this.accountOpened = accountOpened;
-        this.accountClosed = accountClosed;
+    public BankClient(final Name name,
+                      final Date dateBorn,
+                      final Date dateDied,
+                      final String clientId,
+                      final Date signupDate) {
+        validateBankClient(name, dateBorn, clientId, signupDate);
+        this.name = name;
+        this.dateBorn = dateBorn;
+        this.dateDied = dateDied;
+        this.clientId = clientId;
+        this.signupDate = signupDate;
     }
 
     /**
-     * Deposits money into the account.
+     * Checks if the client is alive.
      *
-     * @param amountUsd the amount to deposit in USD
-     * @throws IllegalArgumentException if amount is negative
+     * @return true if the client is alive, false otherwise
      */
-    public void deposit(final double amountUsd) {
-        if (amountUsd < 0) {
-            throw new IllegalArgumentException("Deposit amount cannot be negative");
-        }
-        balanceUsd += amountUsd;
+    public boolean isAlive() {
+        return dateDied == null;
     }
 
     /**
-     * Withdraws money from the account without PIN verification.
+     * Gets detailed information about the client.
+     * Format: "FirstName LastName client #clientId (alive/died dayOfWeek, Month day, year)
+     *          joined the bank on dayOfWeek, Month day, year"
      *
-     * @param amountUsd the amount to withdraw in USD
-     * @throws IllegalArgumentException if amount is negative or exceeds balance
-     */
-    public void withdraw(final double amountUsd) {
-        if (amountUsd < 0) {
-            throw new IllegalArgumentException("Withdrawal amount cannot be negative");
-        }
-        if (amountUsd > balanceUsd) {
-            throw new IllegalArgumentException("Insufficient funds");
-        }
-        balanceUsd -= amountUsd;
-    }
-
-    /**
-     * Withdraws money from the account with PIN verification.
-     *
-     * @param amountUsd the amount to withdraw in USD
-     * @param pinToMatch the PIN to verify
-     * @throws IllegalArgumentException if amount is invalid, PIN is incorrect, or insufficient funds
-     */
-    public void withdraw(final double amountUsd, final int pinToMatch) {
-        if (pinToMatch != pin) {
-            throw new IllegalArgumentException("Invalid PIN");
-        }
-        withdraw(amountUsd);
-    }
-
-    /**
-     * Gets detailed information about the account.
-     * Format depends on whether the account is closed or open.
-     *
-     * @return a formatted string with account details
+     * @return a formatted string with client details
      */
     public String getDetails() {
-        final String clientName;
-        final String openDay;
-        final String openMonthName;
-        final int openDayNum;
-        final int openYear;
+        final String fullName;
+        final String lifeStatus;
+        final String signupDay;
+        final String signupMonthName;
+        final int signupDayNum;
+        final int signupYear;
+        final String birthDay;
+        final String birthMonthName;
+        final int birthDayNum;
+        final int birthYear;
         final String details;
-        final int balanceInt;
-        final String capitalizedOpenDay;
-        final String capitalizedCloseDay;
 
+        fullName = name.getFullName();
 
-        clientName = client.isAlive() ?
-                getName().getFullName() + " has" :
-                getName().getFullName() + " had";
+        signupDay = signupDate.getDayOfTheWeek();
+        signupMonthName = signupDate.getMonthName();
+        signupDayNum = signupDate.getDay();
+        signupYear = signupDate.getYear();
 
-        balanceInt = (int) balanceUsd;
+        birthDay = dateBorn.getDayOfTheWeek();
+        birthMonthName = dateBorn.getMonthName();
+        birthDayNum = dateBorn.getDay();
+        birthYear = dateBorn.getYear();
 
-        openDay = accountOpened.getDayOfTheWeek();
-        openMonthName = accountOpened.getMonthName();
-        openDayNum = accountOpened.getDay();
-        openYear = accountOpened.getYear();
-        capitalizedOpenDay = Character.toUpperCase(openDay.charAt(0)) + openDay.substring(1);
-
-        if (accountClosed == null) {
-            details = clientName + " $" + balanceInt + " USD in account #" + accountNumber +
-                    " which " + (client.isAlive() ? "they" : "he") + " opened on " +
-                    capitalizedOpenDay + " " + openMonthName + " " + openDayNum + ", " + openYear + ".";
+        if (isAlive()) {
+            lifeStatus = "(alive) was born on " + birthDay + ", " + birthMonthName + " " +
+                    birthDayNum + ", " + birthYear + "!";
         } else {
-            final String closeDay;
-            final String closeMonthName;
-            final int closeDayNum;
-            final int closeYear;
+            final String deathDay;
+            final String deathMonthName;
+            final int deathDayNum;
+            final int deathYear;
 
+            deathDay = dateDied.getDayOfTheWeek();
+            deathMonthName = dateDied.getMonthName();
+            deathDayNum = dateDied.getDay();
+            deathYear = dateDied.getYear();
 
-            closeDay = accountClosed.getDayOfTheWeek();
-            closeMonthName = accountClosed.getMonthName();
-            closeDayNum = accountClosed.getDay();
-            closeYear = accountClosed.getYear();
-            capitalizedCloseDay = Character.toUpperCase(closeDay.charAt(0)) + closeDay.substring(1);
-
-            details = clientName + " $" + balanceInt + " USD in account #" + accountNumber +
-                    " which they opened on " + capitalizedOpenDay + " " + openMonthName + " " +
-                    openDayNum + ", " + openYear + " and closed " + capitalizedCloseDay + " " +
-                    closeMonthName + " " + closeDayNum + ", " + closeYear + ".";
+            lifeStatus = "(died " + deathDay + ", " + deathMonthName + " " +
+                    deathDayNum + ", " + deathYear + ") was born on " +
+                    birthDay + ", " + birthMonthName + " " + birthDayNum + ", " + birthYear + "!";
         }
+
+        details = fullName + " client #" + clientId + " " + lifeStatus +
+                " joined the bank on " + signupDay + ", " + signupMonthName + " " +
+                signupDayNum + ", " + signupYear;
 
         return details;
     }
 
     /**
-     * Gets the client's Name object.
+     * Validates the bank client parameters.
      *
-     * @return the client's Name
-     */
-    private Name getName() {
-        final Name clientName;
-        final String firstName;
-        final String lastName;
-
-        firstName = client.getDetails().split(" ")[0];
-        lastName = client.getDetails().split(" ")[1];
-
-        clientName = new Name(firstName, lastName);
-
-        return clientName;
-    }
-
-    /**
-     * Validates the bank account parameters.
-     *
-     * @param client the bank client
-     * @param balanceUsd the initial balance
-     * @param pin the PIN
-     * @param accountNumber the account number
-     * @param accountOpened the date account was opened
+     * @param name the client's name
+     * @param dateBorn the client's birthdate
+     * @param clientId the client ID
+     * @param signupDate the signup date
      * @throws IllegalArgumentException if any parameter is invalid
      */
-    private static void validateBankAccount(final BankClient client,
-                                            final double balanceUsd,
-                                            final int pin,
-                                            final String accountNumber,
-                                            final Date accountOpened) {
-        if (client == null) {
-            throw new IllegalArgumentException("Client cannot be null");
+    private static void validateBankClient(final Name name,
+                                           final Date dateBorn,
+                                           final String clientId,
+                                           final Date signupDate) {
+        if (name == null) {
+            throw new IllegalArgumentException("Name cannot be null");
         }
 
-        if (balanceUsd < 0) {
-            throw new IllegalArgumentException("Balance cannot be negative");
+        if (dateBorn == null) {
+            throw new IllegalArgumentException("Birth date cannot be null");
         }
 
-        if (pin < MIN_PIN || pin > MAX_PIN) {
-            throw new IllegalArgumentException("PIN must be a 4-digit number");
+        if (signupDate == null) {
+            throw new IllegalArgumentException("Signup date cannot be null");
         }
 
-        if (accountNumber == null || accountNumber.isBlank()) {
-            throw new IllegalArgumentException("Account number cannot be null or blank");
+        if (clientId == null || clientId.isBlank()) {
+            throw new IllegalArgumentException("Client ID cannot be null or blank");
         }
 
-        if (accountNumber.length() < MIN_ACCOUNT_NUMBER_LENGTH ||
-                accountNumber.length() > MAX_ACCOUNT_NUMBER_LENGTH) {
-            throw new IllegalArgumentException("Account number must be 6 or 7 characters");
-        }
-
-        if (accountOpened == null) {
-            throw new IllegalArgumentException("Account opened date cannot be null");
+        if (clientId.length() < MIN_CLIENT_ID_LENGTH || clientId.length() > MAX_CLIENT_ID_LENGTH) {
+            throw new IllegalArgumentException("Client ID must be 6 or 7 characters");
         }
     }
 }
