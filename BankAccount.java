@@ -2,6 +2,7 @@ package ca.bcit.comp2522.bank;
 
 /**
  * Represents a bank account with balance, PIN protection, and transaction capabilities.
+ * Manages deposits, withdrawals, and account details for a bank client.
  *
  * @author Ziad Malik
  * @version 1.0
@@ -14,8 +15,11 @@ public class BankAccount {
     private final Date accountOpened;
     private final Date accountClosed;
 
+    // Account number length validation constants
     private static final int MIN_ACCOUNT_NUMBER_LENGTH = 6;
     private static final int MAX_ACCOUNT_NUMBER_LENGTH = 7;
+
+    // PIN validation constants
     private static final int MIN_PIN = 1000;
     private static final int MAX_PIN = 9999;
 
@@ -52,9 +56,12 @@ public class BankAccount {
      * @throws IllegalArgumentException if amount is negative
      */
     public void deposit(final double amountUsd) {
+        // Validate deposit amount is not negative
         if (amountUsd < 0) {
             throw new IllegalArgumentException("Deposit amount cannot be negative");
         }
+
+        // Add deposit amount to current balance
         balanceUsd += amountUsd;
     }
 
@@ -65,12 +72,17 @@ public class BankAccount {
      * @throws IllegalArgumentException if amount is negative or exceeds balance
      */
     public void withdraw(final double amountUsd) {
+        // Validate withdrawal amount is not negative
         if (amountUsd < 0) {
             throw new IllegalArgumentException("Withdrawal amount cannot be negative");
         }
+
+        // Validate sufficient funds are available
         if (amountUsd > balanceUsd) {
             throw new IllegalArgumentException("Insufficient funds");
         }
+
+        // Subtract withdrawal amount from current balance
         balanceUsd -= amountUsd;
     }
 
@@ -82,15 +94,25 @@ public class BankAccount {
      * @throws IllegalArgumentException if amount is invalid, PIN is incorrect, or insufficient funds
      */
     public void withdraw(final double amountUsd, final int pinToMatch) {
+        // Verify PIN matches before allowing withdrawal
         if (pinToMatch != pin) {
             throw new IllegalArgumentException("Invalid PIN");
         }
+
+        // Call the other withdraw method to perform the actual withdrawal
         withdraw(amountUsd);
     }
 
     /**
      * Gets detailed information about the account.
-     * Format depends on whether the account is closed or open.
+     *
+     * Format for open accounts:
+     * "FirstName LastName has/had $balance USD in account #accountNumber which they opened on
+     *  DayOfWeek Month day, year."
+     *
+     * Format for closed accounts:
+     * "FirstName LastName has/had $balance USD in account #accountNumber which they opened on
+     *  DayOfWeek Month day, year and closed DayOfWeek Month day, year."
      *
      * @return a formatted string with account details
      */
@@ -103,63 +125,56 @@ public class BankAccount {
         final String details;
         final int balanceInt;
         final String capitalizedOpenDay;
-        final String capitalizedCloseDay;
 
-
+        // Determine verb tense based on whether client is alive
+        // Use "has" for alive clients, "had" for deceased clients
         clientName = client.isAlive() ?
-                getName().getFullName() + " has" :
-                getName().getFullName() + " had";
+                client.getName().getFullName() + " has" :
+                client.getName().getFullName() + " had";
 
+        // Convert balance to integer (remove decimal portion)
         balanceInt = (int) balanceUsd;
 
+        // Extract account opened date components
         openDay = accountOpened.getDayOfTheWeek();
         openMonthName = accountOpened.getMonthName();
         openDayNum = accountOpened.getDay();
         openYear = accountOpened.getYear();
+
+        // Capitalize first letter of day name
         capitalizedOpenDay = Character.toUpperCase(openDay.charAt(0)) + openDay.substring(1);
 
+        // Build details string based on whether account is closed
         if (accountClosed == null) {
+            // Account is still open
             details = clientName + " $" + balanceInt + " USD in account #" + accountNumber +
-                    " which " + (client.isAlive() ? "they" : "he") + " opened on " +
+                    " which they opened on " +
                     capitalizedOpenDay + " " + openMonthName + " " + openDayNum + ", " + openYear + ".";
         } else {
+            // Account is closed
             final String closeDay;
             final String closeMonthName;
             final int closeDayNum;
             final int closeYear;
+            final String capitalizedCloseDay;
 
-
+            // Extract account closed date components
             closeDay = accountClosed.getDayOfTheWeek();
             closeMonthName = accountClosed.getMonthName();
             closeDayNum = accountClosed.getDay();
             closeYear = accountClosed.getYear();
+
+            // Capitalize first letter of close day name
             capitalizedCloseDay = Character.toUpperCase(closeDay.charAt(0)) + closeDay.substring(1);
 
+            // Build details string with both open and close dates
             details = clientName + " $" + balanceInt + " USD in account #" + accountNumber +
-                    " which he opened on " + capitalizedOpenDay + " " + openMonthName + " " +
+                    " which they opened on " + capitalizedOpenDay + " " + openMonthName + " " +
                     openDayNum + ", " + openYear + " and closed " + capitalizedCloseDay + " " +
                     closeMonthName + " " + closeDayNum + ", " + closeYear + ".";
         }
 
         return details;
-    }
-
-    /**
-     * Gets the client's Name object.
-     *
-     * @return the client's Name
-     */
-    private Name getName() {
-        final Name clientName;
-        final String firstName;
-        final String lastName;
-
-        firstName = client.getDetails().split(" ")[0];
-        lastName = client.getDetails().split(" ")[1];
-
-        clientName = new Name(firstName, lastName);
-
-        return clientName;
     }
 
     /**
@@ -177,27 +192,33 @@ public class BankAccount {
                                             final int pin,
                                             final String accountNumber,
                                             final Date accountOpened) {
+        // Validate client is not null
         if (client == null) {
             throw new IllegalArgumentException("Client cannot be null");
         }
 
+        // Validate balance is not negative
         if (balanceUsd < 0) {
             throw new IllegalArgumentException("Balance cannot be negative");
         }
 
+        // Validate PIN is a 4-digit number (1000-9999)
         if (pin < MIN_PIN || pin > MAX_PIN) {
             throw new IllegalArgumentException("PIN must be a 4-digit number");
         }
 
+        // Validate account number is not null or blank
         if (accountNumber == null || accountNumber.isBlank()) {
             throw new IllegalArgumentException("Account number cannot be null or blank");
         }
 
+        // Validate account number length is 6 or 7 characters
         if (accountNumber.length() < MIN_ACCOUNT_NUMBER_LENGTH ||
                 accountNumber.length() > MAX_ACCOUNT_NUMBER_LENGTH) {
             throw new IllegalArgumentException("Account number must be 6 or 7 characters");
         }
 
+        // Validate account opened date is not null
         if (accountOpened == null) {
             throw new IllegalArgumentException("Account opened date cannot be null");
         }

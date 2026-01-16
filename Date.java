@@ -12,16 +12,22 @@ public class Date {
     private final int month;
     private final int day;
 
+    // Year validation constants
     private static final int MIN_YEAR = 1800;
     private static final int MAX_YEAR = 2026;
+
+    // Month validation constants
     private static final int MIN_MONTH = 1;
     private static final int MAX_MONTH = 12;
+
+    // Day validation constants
     private static final int MIN_DAY = 1;
     private static final int DAYS_IN_LONG_MONTH = 31;
     private static final int DAYS_IN_SHORT_MONTH = 30;
     private static final int DAYS_IN_FEB_LEAP = 29;
     private static final int DAYS_IN_FEB_NORMAL = 28;
 
+    // Month constants for readability
     private static final int JANUARY = 1;
     private static final int FEBRUARY = 2;
     private static final int MARCH = 3;
@@ -35,6 +41,7 @@ public class Date {
     private static final int NOVEMBER = 11;
     private static final int DECEMBER = 12;
 
+    // Day of week constants (for day-of-week calculation result)
     private static final int SATURDAY = 0;
     private static final int SUNDAY = 1;
     private static final int MONDAY = 2;
@@ -43,10 +50,12 @@ public class Date {
     private static final int THURSDAY = 5;
     private static final int FRIDAY = 6;
 
+    // Leap year calculation constants
     private static final int LEAP_YEAR_DIVISOR = 4;
     private static final int CENTURY_YEAR_DIVISOR = 100;
     private static final int QUAD_CENTURY_DIVISOR = 400;
 
+    // Day-of-week algorithm constants
     private static final int TWELVE_DIVISOR = 12;
     private static final int FOUR_DIVISOR = 4;
     private static final int SEVEN_DIVISOR = 7;
@@ -97,7 +106,8 @@ public class Date {
     }
 
     /**
-     * Gets the date in YYYY-MM-DD format.
+     * Gets the date in YYYY-MM-DD format (e.g., "2024-09-30").
+     * Pads single-digit months and days with a leading zero.
      *
      * @return the date string in format YYYY-MM-DD
      */
@@ -106,8 +116,13 @@ public class Date {
         final String monthStr;
         final String dayStr;
 
+        // Convert year to string
         yearStr = String.valueOf(year);
+
+        // Pad month with leading zero if needed (e.g., 3 becomes "03")
         monthStr = month < 10 ? "0" + month : String.valueOf(month);
+
+        // Pad day with leading zero if needed (e.g., 7 becomes "07")
         dayStr = day < 10 ? "0" + day : String.valueOf(day);
 
         return yearStr + "-" + monthStr + "-" + dayStr;
@@ -124,20 +139,34 @@ public class Date {
 
     /**
      * Calculates and returns the day of the week for this date.
-     * Uses a specific algorithm for dates between 1800-2026:
+     * Uses a specific algorithm for dates between 1800-2026.
 
-     * Step 1: Calculate the number of twelves in the last two digits of the year
-     * Step 2: Calculate the remainder after removing those twelves
-     * Step 3: Calculate the number of fours in step 2
-     * Step 4: Add the day of the month
-     * Step 5: Add the month code (jan-dec: 144025036146)
-     * Step 6: Sum all previous numbers and mod by 7
+     * Algorithm steps (example: October 31, 1977):
+     * Step 1: Calculate number of twelves in last two digits of year (77/12 = 6)
+     * Step 2: Calculate remainder after removing twelves (77 - 72 = 5)
+     * Step 3: Calculate number of fours in step 2 (5/4 = 1)
+     * Step 4: Add the day of the month (31)
+     * Step 5: Add the month code (October = 1)
+     *         Month codes: Jan=1, Feb=4, Mar=4, Apr=0, May=2, Jun=5,
+     *                      Jul=0, Aug=3, Sep=6, Oct=1, Nov=4, Dec=6
+     * Step 6: Sum all previous steps and mod by 7 (6+5+1+31+1 = 44; 44%7 = 2)
      * Step 7: Map result to day name (0=Sat, 1=Sun, 2=Mon, 3=Tue, 4=Wed, 5=Thu, 6=Fri)
+     *         Result: 2 = Monday
 
      * Special adjustments:
-     * - Add 6 for dates in the 2000s
-     * - Add 2 for dates in the 1800s
+     * - Add 6 for all dates in the 2000s (2000-2026)
+     * - Add 2 for all dates in the 1800s (1800-1899)
      * - Add 6 for January/February dates in leap years
+
+     * Example: March 15, 2021,
+     * Step 0: Add 6 for 2000s (number = 6)
+     * Step 1: Number of twelves in 21 (number = 1)
+     * Step 2: Remainder from 21/12 (number = 9)
+     * Step 3: Number of fours in 9 (number = 2)
+     * Step 4: Day of month (number = 15)
+     * Step 5: Month code for March (number = 4)
+     * Step 6: Sum all: 6+1+9+2+15+4 = 37; 37%7 = 2
+     * Step 7: 2 = Monday
      *
      * @return the day of the week as a lowercase string
      */
@@ -153,18 +182,23 @@ public class Date {
         final int step6;
         final int dayCode;
 
+        // Get last two digits of year (e.g., 1977 becomes 77)
         lastTwoDigits = year % CENTURY_YEAR_DIVISOR;
 
-        // Determine century offset
+        // Determine century offset based on which century the year falls in
         if (year >= MIN_YEAR && year < 1900) {
+            // For 1800s: add 2
             centuryOffset = CENTURY_1800_OFFSET;
         } else if (year >= 2000 && year <= MAX_YEAR) {
+            // For 2000s: add 6
             centuryOffset = CENTURY_2000_OFFSET;
         } else {
+            // For 1900s: add 0
             centuryOffset = 0;
         }
 
-        // Determine leap year offset for January and February
+        // Determine leap year offset for January and February only
+        // If it's a leap year AND the month is Jan or Feb, add 6
         if (isLeapYear(year) && (month == JANUARY || month == FEBRUARY)) {
             leapYearOffset = LEAP_YEAR_JAN_FEB_OFFSET;
         } else {
@@ -172,24 +206,29 @@ public class Date {
         }
 
         // Step 1: Calculate the number of twelves in last two digits
+        // Example: 77/12 = 6 (we only want the whole number)
         step1 = lastTwoDigits / TWELVE_DIVISOR;
 
-        // Step 2: Calculate remainder
+        // Step 2: Calculate remainder after removing those twelves
+        // Example: 77 % 12 = 5 (77 - 6*12 = 77 - 72 = 5)
         step2 = lastTwoDigits % TWELVE_DIVISOR;
 
         // Step 3: Calculate the number of fours in step 2
+        // Example: 5/4 = 1 (we only want the whole number)
         step3 = step2 / FOUR_DIVISOR;
 
         // Step 4: The day of the month
         step4 = day;
 
-        // Step 5: Add month code
+        // Step 5: Add month code (each month has a specific code)
         step5 = getMonthCode(month);
 
-        // Step 6: Sum all numbers and mod by 7
+        // Step 6: Sum all numbers including offsets, then mod by 7
+        // This gives us a number between 0 and 6 representing the day of week
         step6 = centuryOffset + leapYearOffset + step1 + step2 + step3 + step4 + step5;
         dayCode = step6 % SEVEN_DIVISOR;
 
+        // Step 7: Convert the day code (0-6) to actual day name
         return getDayName(dayCode);
     }
 
@@ -202,21 +241,26 @@ public class Date {
      * @throws IllegalArgumentException if any parameter is invalid
      */
     private static void validateDate(final int year, final int month, final int day) {
+        // Validate year is within acceptable range
         if (year < MIN_YEAR || year > MAX_YEAR) {
             throw new IllegalArgumentException("Year must be between 1800 and 2026");
         }
 
+        // Validate month is between 1 and 12
         if (month < MIN_MONTH || month > MAX_MONTH) {
             throw new IllegalArgumentException("Month must be between 1 and 12");
         }
 
+        // Validate day is at least 1
         if (day < MIN_DAY) {
             throw new IllegalArgumentException("Day must be at least 1");
         }
 
+        // Get the maximum valid day for this specific month and year
         final int maxDaysInMonth;
         maxDaysInMonth = getMaxDaysInMonth(month, year);
 
+        // Validate day doesn't exceed maximum for the month
         if (day > maxDaysInMonth) {
             throw new IllegalArgumentException("Day must be valid for the given month and year");
         }
@@ -224,6 +268,7 @@ public class Date {
 
     /**
      * Gets the maximum number of days in a given month for a given year.
+     * Takes into account leap years for February.
      *
      * @param month the month
      * @param year the year
@@ -232,6 +277,7 @@ public class Date {
     private static int getMaxDaysInMonth(final int month, final int year) {
         final int maxDays;
 
+        // February has special handling for leap years
         if (month == FEBRUARY) {
             if (isLeapYear(year)) {
                 maxDays = DAYS_IN_FEB_LEAP;
@@ -239,8 +285,10 @@ public class Date {
                 maxDays = DAYS_IN_FEB_NORMAL;
             }
         } else if (month == APRIL || month == JUNE || month == SEPTEMBER || month == NOVEMBER) {
+            // April, June, September, November have 30 days
             maxDays = DAYS_IN_SHORT_MONTH;
         } else {
+            // January, March, May, July, August, October, December have 31 days
             maxDays = DAYS_IN_LONG_MONTH;
         }
 
@@ -249,6 +297,11 @@ public class Date {
 
     /**
      * Determines if a year is a leap year.
+     * Leap year rules:
+     * 1. Divisible by 400 -> leap year (e.g., 2000)
+     * 2. Divisible by 100 but not 400 -> not a leap year (e.g., 1900)
+     * 3. Divisible by 4 but not 100 -> leap year (e.g., 2024)
+     * 4. Otherwise -> not a leap year
      *
      * @param year the year to check
      * @return true if the year is a leap year, false otherwise
@@ -256,13 +309,17 @@ public class Date {
     private static boolean isLeapYear(final int year) {
         final boolean isLeap;
 
+        // Check if divisible by 400 (these are always leap years)
         if (year % QUAD_CENTURY_DIVISOR == 0) {
             isLeap = true;
         } else if (year % CENTURY_YEAR_DIVISOR == 0) {
+            // Divisible by 100 but not 400 (these are NOT leap years)
             isLeap = false;
         } else if (year % LEAP_YEAR_DIVISOR == 0) {
+            // Divisible by 4 but not 100 (these ARE leap years)
             isLeap = true;
         } else {
+            // Not divisible by 4 (these are NOT leap years)
             isLeap = false;
         }
 
@@ -297,8 +354,13 @@ public class Date {
 
     /**
      * Gets the month code used in day-of-week calculation.
-     * Month codes for jan-dec: 1,4,4,0,2,5,0,3,6,1,4,6
-     *
+     * Month codes follow the pattern: 144025036146 for Jan through Dec.
+     * These codes are part of the algorithm for calculating day of the week.
+
+     * Month codes:
+     * January=1, February=4, March=4, April=0, May=2, June=5,
+     * July=0, August=3, September=6, October=1, November=4, December=6
+
      * @param month the month
      * @return the month code
      */
@@ -318,6 +380,8 @@ public class Date {
 
     /**
      * Converts a day code to a day name.
+     * The day code mapping is: 0=Saturday, 1=Sunday, 2=Monday, 3=Tuesday,
+     * 4=Wednesday, 5=Thursday, 6=Friday
      *
      * @param dayCode the day code (0-6)
      * @return the day name in lowercase
@@ -325,13 +389,13 @@ public class Date {
     private static String getDayName(final int dayCode) {
 
         return switch (dayCode) {
-            case SATURDAY -> "saturday";
-            case SUNDAY -> "sunday";
-            case MONDAY -> "monday";
-            case TUESDAY -> "tuesday";
-            case WEDNESDAY -> "wednesday";
-            case THURSDAY -> "thursday";
-            case FRIDAY -> "friday";
+            case SATURDAY -> "Saturday";
+            case SUNDAY -> "Sunday";
+            case MONDAY -> "Monday";
+            case TUESDAY -> "Tuesday";
+            case WEDNESDAY -> "Wednesday";
+            case THURSDAY -> "Thursday";
+            case FRIDAY -> "Friday";
             default -> "unknown";
         };
     }

@@ -2,6 +2,7 @@ package ca.bcit.comp2522.bank;
 
 /**
  * Represents a bank client with personal information and account details.
+ * Stores the client's name, birth/death dates, unique ID, and signup date.
  *
  * @author Ziad Malik
  * @version 1.0
@@ -13,6 +14,7 @@ public class BankClient {
     private final String clientId;
     private final Date signupDate;
 
+    // Client ID length validation constants
     private static final int MIN_CLIENT_ID_LENGTH = 6;
     private static final int MAX_CLIENT_ID_LENGTH = 7;
 
@@ -40,7 +42,17 @@ public class BankClient {
     }
 
     /**
+     * Gets the client's Name object.
+     *
+     * @return the client's name
+     */
+    public Name getName() {
+        return name;
+    }
+
+    /**
      * Checks if the client is alive.
+     * A client is considered alive if their death date is null.
      *
      * @return true if the client is alive, false otherwise
      */
@@ -49,9 +61,15 @@ public class BankClient {
     }
 
     /**
-     * Gets detailed information about the client.
-     * Format: "FirstName LastName client #clientId (alive/died dayOfWeek, Month day, year)
-     *          joined the bank on dayOfWeek, Month day, year"
+     * Gets detailed information about the client in a formatted string.
+
+     * Format for alive clients:
+     * "FirstName LastName client #clientId (alive) was born on dayOfWeek, Month day, year!
+     *  joined the bank on dayOfWeek, Month day, year"
+
+     * Format for deceased clients:
+     * "FirstName LastName client #clientId (died dayOfWeek, Month day, year) was born on
+     *  dayOfWeek, Month day, year! joined the bank on dayOfWeek, Month day, year"
      *
      * @return a formatted string with client details
      */
@@ -68,37 +86,46 @@ public class BankClient {
         final int birthYear;
         final String details;
 
+        // Get the formatted full name
         fullName = name.getFullName();
 
+        // Extract signup date components
         signupDay = signupDate.getDayOfTheWeek();
         signupMonthName = signupDate.getMonthName();
         signupDayNum = signupDate.getDay();
         signupYear = signupDate.getYear();
 
+        // Extract birthdate components
         birthDay = dateBorn.getDayOfTheWeek();
         birthMonthName = dateBorn.getMonthName();
         birthDayNum = dateBorn.getDay();
         birthYear = dateBorn.getYear();
 
+        // Build life status string based on whether client is alive or deceased
         if (isAlive()) {
+            // Client is alive: show only birth information
             lifeStatus = "(alive) was born on " + birthDay + ", " + birthMonthName + " " +
                     birthDayNum + ", " + birthYear + "!";
         } else {
+            // Client is deceased: show both death and birth information
             final String deathDay;
             final String deathMonthName;
             final int deathDayNum;
             final int deathYear;
 
+            // Extract death date components
             deathDay = dateDied.getDayOfTheWeek();
             deathMonthName = dateDied.getMonthName();
             deathDayNum = dateDied.getDay();
             deathYear = dateDied.getYear();
 
+            // Build status with death information first, then birth
             lifeStatus = "(died " + deathDay + ", " + deathMonthName + " " +
                     deathDayNum + ", " + deathYear + ") was born on " +
                     birthDay + ", " + birthMonthName + " " + birthDayNum + ", " + birthYear + "!";
         }
 
+        // Combine all components into final details string
         details = fullName + " client #" + clientId + " " + lifeStatus +
                 " joined the bank on " + signupDay + ", " + signupMonthName + " " +
                 signupDayNum + ", " + signupYear;
@@ -119,22 +146,27 @@ public class BankClient {
                                            final Date dateBorn,
                                            final String clientId,
                                            final Date signupDate) {
+        // Validate name is not null
         if (name == null) {
             throw new IllegalArgumentException("Name cannot be null");
         }
 
+        // Validate birthdate is not null
         if (dateBorn == null) {
             throw new IllegalArgumentException("Birth date cannot be null");
         }
 
+        // Validate signup date is not null
         if (signupDate == null) {
             throw new IllegalArgumentException("Signup date cannot be null");
         }
 
+        // Validate client ID is not null or blank
         if (clientId == null || clientId.isBlank()) {
             throw new IllegalArgumentException("Client ID cannot be null or blank");
         }
 
+        // Validate client ID length is 6 or 7 characters
         if (clientId.length() < MIN_CLIENT_ID_LENGTH || clientId.length() > MAX_CLIENT_ID_LENGTH) {
             throw new IllegalArgumentException("Client ID must be 6 or 7 characters");
         }
