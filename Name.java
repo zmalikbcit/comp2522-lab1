@@ -36,7 +36,7 @@ public final class Name {
     }
 
     public String getFullName(){
-        // Z iad M alik
+        // Ziad Malik
         final String firstFormatted;
         final String lastFormatted;
 
@@ -54,13 +54,16 @@ public final class Name {
 
         builderFirst = new StringBuilder();
         builderLast = new StringBuilder();
+        builderFirst.append(first).reverse();
+        builderLast.append(last).reverse();
 
-        for (int i = first.length() - 1; i >= 0; i--) {
-            builderFirst.append(first.charAt(i));
-        }
-        for (int i = last.length() - 1; i >= 0; i--) {
-            builderLast.append(last.charAt(i));
-        }
+
+//        for (int i = first.length() - 1; i >= 0; i--) {
+//            builderFirst.append(first.charAt(i));
+//        }
+//        for (int i = last.length() - 1; i >= 0; i--) {
+//            builderLast.append(last.charAt(i));
+//        }
 
         reversedFirst = builderFirst.toString();
         reversedLast = builderLast.toString();
