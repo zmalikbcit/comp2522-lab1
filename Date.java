@@ -307,10 +307,9 @@ public class Date {
         return switch (month) {
             case JANUARY, OCTOBER -> 1;
             case FEBRUARY, MARCH, NOVEMBER -> 4;
-            case APRIL -> 0;
+            case APRIL, JULY -> 0;
             case MAY -> 2;
             case JUNE -> 5;
-            case JULY -> 0;
             case AUGUST -> 3;
             case SEPTEMBER, DECEMBER -> 6;
             default -> 0;
