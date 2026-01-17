@@ -2,7 +2,6 @@ package ca.bcit.comp2522.bank;
 
 /**
  * Represents a person's name with first and last components.
- * Provides methods for name manipulation including initials, full name formatting, and reversal.
  *
  * @author Ziad Malik
  * @version 1.0
@@ -16,7 +15,6 @@ public final class Name {
 
     /**
      * Constructs a Name object with the specified first and last names.
-     * Names must be non-null, non-blank, under 45 characters, and cannot contain "admin".
      *
      * @param first the first name
      * @param last the last name
@@ -48,7 +46,6 @@ public final class Name {
 
     /**
      * Gets the initials of the name in the format "F.L." (e.g., "T.W." for Tiger Woods).
-     * The initials are automatically capitalized.
      *
      * @return the initials with periods in between
      */
@@ -65,7 +62,6 @@ public final class Name {
 
     /**
      * Gets the full name in proper case format (e.g., "Tiger Woods" from "tigER wooDS").
-     * First letter of each name is capitalized, rest are lowercase.
      *
      * @return the formatted full name
      */
@@ -82,7 +78,6 @@ public final class Name {
 
     /**
      * Gets the reversed version of a name.
-     * Each name is reversed individually, and the order is swapped (last first).
      *
      * @param first the first name to reverse
      * @param last the last name to reverse

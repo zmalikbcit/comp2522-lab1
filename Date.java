@@ -27,7 +27,7 @@ public class Date {
     private static final int DAYS_IN_FEB_LEAP = 29;
     private static final int DAYS_IN_FEB_NORMAL = 28;
 
-    // Month constants for readability
+    // Month constants
     private static final int JANUARY = 1;
     private static final int FEBRUARY = 2;
     private static final int MARCH = 3;
@@ -140,33 +140,6 @@ public class Date {
     /**
      * Calculates and returns the day of the week for this date.
      * Uses a specific algorithm for dates between 1800-2026.
-
-     * Algorithm steps (example: October 31, 1977):
-     * Step 1: Calculate number of twelves in last two digits of year (77/12 = 6)
-     * Step 2: Calculate remainder after removing twelves (77 - 72 = 5)
-     * Step 3: Calculate number of fours in step 2 (5/4 = 1)
-     * Step 4: Add the day of the month (31)
-     * Step 5: Add the month code (October = 1)
-     *         Month codes: Jan=1, Feb=4, Mar=4, Apr=0, May=2, Jun=5,
-     *                      Jul=0, Aug=3, Sep=6, Oct=1, Nov=4, Dec=6
-     * Step 6: Sum all previous steps and mod by 7 (6+5+1+31+1 = 44; 44%7 = 2)
-     * Step 7: Map result to day name (0=Sat, 1=Sun, 2=Mon, 3=Tue, 4=Wed, 5=Thu, 6=Fri)
-     *         Result: 2 = Monday
-
-     * Special adjustments:
-     * - Add 6 for all dates in the 2000s (2000-2026)
-     * - Add 2 for all dates in the 1800s (1800-1899)
-     * - Add 6 for January/February dates in leap years
-
-     * Example: March 15, 2021,
-     * Step 0: Add 6 for 2000s (number = 6)
-     * Step 1: Number of twelves in 21 (number = 1)
-     * Step 2: Remainder from 21/12 (number = 9)
-     * Step 3: Number of fours in 9 (number = 2)
-     * Step 4: Day of month (number = 15)
-     * Step 5: Month code for March (number = 4)
-     * Step 6: Sum all: 6+1+9+2+15+4 = 37; 37%7 = 2
-     * Step 7: 2 = Monday
      *
      * @return the day of the week as a lowercase string
      */
@@ -206,15 +179,12 @@ public class Date {
         }
 
         // Step 1: Calculate the number of twelves in last two digits
-        // Example: 77/12 = 6 (we only want the whole number)
         step1 = lastTwoDigits / TWELVE_DIVISOR;
 
         // Step 2: Calculate remainder after removing those twelves
-        // Example: 77 % 12 = 5 (77 - 6*12 = 77 - 72 = 5)
         step2 = lastTwoDigits % TWELVE_DIVISOR;
 
         // Step 3: Calculate the number of fours in step 2
-        // Example: 5/4 = 1 (we only want the whole number)
         step3 = step2 / FOUR_DIVISOR;
 
         // Step 4: The day of the month
@@ -297,11 +267,6 @@ public class Date {
 
     /**
      * Determines if a year is a leap year.
-     * Leap year rules:
-     * 1. Divisible by 400 -> leap year (e.g., 2000)
-     * 2. Divisible by 100 but not 400 -> not a leap year (e.g., 1900)
-     * 3. Divisible by 4 but not 100 -> leap year (e.g., 2024)
-     * 4. Otherwise -> not a leap year
      *
      * @param year the year to check
      * @return true if the year is a leap year, false otherwise
@@ -354,13 +319,7 @@ public class Date {
 
     /**
      * Gets the month code used in day-of-week calculation.
-     * Month codes follow the pattern: 144025036146 for Jan through Dec.
-     * These codes are part of the algorithm for calculating day of the week.
-
-     * Month codes:
-     * January=1, February=4, March=4, April=0, May=2, June=5,
-     * July=0, August=3, September=6, October=1, November=4, December=6
-
+     *
      * @param month the month
      * @return the month code
      */
@@ -380,8 +339,6 @@ public class Date {
 
     /**
      * Converts a day code to a day name.
-     * The day code mapping is: 0=Saturday, 1=Sunday, 2=Monday, 3=Tuesday,
-     * 4=Wednesday, 5=Thursday, 6=Friday
      *
      * @param dayCode the day code (0-6)
      * @return the day name in lowercase

@@ -62,14 +62,6 @@ public class BankClient {
 
     /**
      * Gets detailed information about the client in a formatted string.
-
-     * Format for alive clients:
-     * "FirstName LastName client #clientId (alive) was born on dayOfWeek, Month day, year!
-     *  joined the bank on dayOfWeek, Month day, year"
-
-     * Format for deceased clients:
-     * "FirstName LastName client #clientId (died dayOfWeek, Month day, year) was born on
-     *  dayOfWeek, Month day, year! joined the bank on dayOfWeek, Month day, year"
      *
      * @return a formatted string with client details
      */

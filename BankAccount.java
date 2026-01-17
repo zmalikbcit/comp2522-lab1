@@ -106,14 +106,6 @@ public class BankAccount {
     /**
      * Gets detailed information about the account.
      *
-     * Format for open accounts:
-     * "FirstName LastName has/had $balance USD in account #accountNumber which they opened on
-     *  DayOfWeek Month day, year."
-     *
-     * Format for closed accounts:
-     * "FirstName LastName has/had $balance USD in account #accountNumber which they opened on
-     *  DayOfWeek Month day, year and closed DayOfWeek Month day, year."
-     *
      * @return a formatted string with account details
      */
     public String getDetails() {
