@@ -8,12 +8,12 @@ package ca.bcit.comp2522.bank;
  */
 public class Main {
     /**
-     * Main method that creates and tests bank accounts for various historical figures.
+     * Main method that creates and tests bank accounts.
      *
      * @param args command line arguments (not used)
      */
     public static void main(final String[] args) {
-        // Albert Einstein (March 14, 1879 – April 18, 1955)
+        // Albert Einstein
         final Name einsteinName;
         final Date einsteinBirth;
         final Date einsteinDeath;
@@ -40,7 +40,7 @@ public class Main {
         System.out.println(einsteinAccount.getDetails());
         System.out.println();
 
-        // Nelson Mandela (July 18, 1918 – December 5, 2013)
+        // Nelson Mandela
         final Name mandelaName;
         final Date mandelaBirth;
         final Date mandelaDeath;
@@ -65,7 +65,7 @@ public class Main {
         System.out.println(mandelaAccount.getDetails());
         System.out.println();
 
-        // Frida Kahlo (July 6, 1907 – July 13, 1954)
+        // Frida Kahlo
         final Name kahloName;
         final Date kahloBirth;
         final Date kahloDeath;
@@ -92,7 +92,7 @@ public class Main {
         System.out.println(kahloAccount.getDetails());
         System.out.println();
 
-        // Jackie Chan (April 7, 1954 – still alive)
+        // Jackie Chan
         final Name chanName;
         final Date chanBirth;
         final Date chanSignup;

@@ -82,13 +82,13 @@ public class BankClient {
         fullName = name.getFullName();
 
         // Extract signup date components
-        signupDay = signupDate.getDayOfTheWeek();
+        signupDay = signupDate.getDayOfWeek();
         signupMonthName = signupDate.getMonthName();
         signupDayNum = signupDate.getDay();
         signupYear = signupDate.getYear();
 
         // Extract birthdate components
-        birthDay = dateBorn.getDayOfTheWeek();
+        birthDay = dateBorn.getDayOfWeek();
         birthMonthName = dateBorn.getMonthName();
         birthDayNum = dateBorn.getDay();
         birthYear = dateBorn.getYear();
@@ -106,7 +106,7 @@ public class BankClient {
             final int deathYear;
 
             // Extract death date components
-            deathDay = dateDied.getDayOfTheWeek();
+            deathDay = dateDied.getDayOfWeek();
             deathMonthName = dateDied.getMonthName();
             deathDayNum = dateDied.getDay();
             deathYear = dateDied.getYear();

@@ -92,7 +92,6 @@ public final class Name {
         builderFirst = new StringBuilder();
         builderLast = new StringBuilder();
 
-        // Use StringBuilder's built-in reverse method
         builderFirst.append(first).reverse();
         builderLast.append(last).reverse();
 
@@ -100,7 +99,6 @@ public final class Name {
         reversedFirst = builderFirst.toString();
         reversedLast = builderLast.toString();
 
-        // Return in reversed order: last name first
         return reversedLast + " " + reversedFirst;
     }
 
@@ -113,32 +111,26 @@ public final class Name {
      *                                  or contains the word "admin" in any case
      */
     private static void validateName(final String first, final String last) {
-        // Validate first name: not null or blank
         if  (first == null || first.isBlank()) {
             throw new IllegalArgumentException("first cannot be null or empty");
         }
 
-        // Validate first name: length constraint
         if (first.length() > MAX_NAME_LENGTH) {
             throw new IllegalArgumentException("first cannot be longer than 45 characters");
         }
 
-        // Validate first name: no "admin" keyword (case-insensitive)
         if (first.toLowerCase().contains("admin")){
             throw new IllegalArgumentException("first cannot contain admin");
         }
 
-        // Validate last name: not null or blank
         if  (last == null || last.isBlank()) {
             throw new IllegalArgumentException("last cannot be null or empty");
         }
 
-        // Validate last name: length constraint
         if (last.length() > MAX_NAME_LENGTH) {
             throw new IllegalArgumentException("last cannot be longer than 45 characters");
         }
 
-        // Validate last name: no "admin" keyword (case-insensitive)
         if (last.toLowerCase().contains("admin")){
             throw new IllegalArgumentException("last cannot contain admin");
         }

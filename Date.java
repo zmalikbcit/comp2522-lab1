@@ -141,9 +141,9 @@ public class Date {
      * Calculates and returns the day of the week for this date.
      * Uses a specific algorithm for dates between 1800-2026.
      *
-     * @return the day of the week as a lowercase string
+     * @return the day of the week as a string
      */
-    public String getDayOfTheWeek() {
+    public String getDayOfWeek() {
         final int lastTwoDigits;
         final int centuryOffset;
         final int leapYearOffset;
@@ -315,6 +315,39 @@ public class Date {
             case DECEMBER -> "December";
             default -> "Unknown";
         };
+        /*
+        final String monthName;
+
+        if (month == JANUARY) {
+            monthName = "January";
+        } else if (month == FEBRUARY) {
+            monthName = "February";
+        } else if (month == MARCH) {
+            monthName = "March";
+        } else if (month == APRIL) {
+            monthName = "April";
+        } else if (month == MAY) {
+            monthName = "May";
+        } else if (month == JUNE) {
+            monthName = "June";
+        } else if (month == JULY) {
+            monthName = "July";
+        } else if (month == AUGUST) {
+            monthName = "August";
+        } else if (month == SEPTEMBER) {
+            monthName = "September";
+        } else if (month == OCTOBER) {
+            monthName = "October";
+        } else if (month == NOVEMBER) {
+            monthName = "November";
+        } else if (month == DECEMBER) {
+            monthName = "December";
+        } else {
+            monthName = "Unknown";
+        }
+
+        return monthName;
+         */
     }
 
     /**
@@ -335,6 +368,30 @@ public class Date {
             case SEPTEMBER, DECEMBER -> 6;
             default -> 0;
         };
+
+        /*
+        final int monthCode;
+
+        if (month == JANUARY || month == OCTOBER) {
+            monthCode = 1;
+        } else if (month == FEBRUARY || month == MARCH || month == NOVEMBER) {
+            monthCode = 4;
+        } else if (month == APRIL || month == JULY) {
+            monthCode = 0;
+        } else if (month == MAY) {
+            monthCode = 2;
+        } else if (month == JUNE) {
+            monthCode = 5;
+        } else if (month == AUGUST) {
+            monthCode = 3;
+        } else if (month == SEPTEMBER || month == DECEMBER) {
+            monthCode = 6;
+        } else {
+            monthCode = 0;
+        }
+
+        return monthCode;
+        */
     }
 
     /**
@@ -355,5 +412,29 @@ public class Date {
             case FRIDAY -> "Friday";
             default -> "unknown";
         };
+
+        /*
+        final String dayName;
+
+        if (dayCode == SATURDAY) {
+            dayName = "Saturday";
+        } else if (dayCode == SUNDAY) {
+            dayName = "Sunday";
+        } else if (dayCode == MONDAY) {
+            dayName = "Monday";
+        } else if (dayCode == TUESDAY) {
+            dayName = "Tuesday";
+        } else if (dayCode == WEDNESDAY) {
+            dayName = "Wednesday";
+        } else if (dayCode == THURSDAY) {
+            dayName = "Thursday";
+        } else if (dayCode == FRIDAY) {
+            dayName = "Friday";
+        } else {
+            dayName = "unknown";
+        }
+
+        return dayName;
+        */
     }
 }

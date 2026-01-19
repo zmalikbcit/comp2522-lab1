@@ -128,7 +128,7 @@ public class BankAccount {
         balanceInt = (int) balanceUsd;
 
         // Extract account opened date components
-        openDay = accountOpened.getDayOfTheWeek();
+        openDay = accountOpened.getDayOfWeek();
         openMonthName = accountOpened.getMonthName();
         openDayNum = accountOpened.getDay();
         openYear = accountOpened.getYear();
@@ -151,7 +151,7 @@ public class BankAccount {
             final String capitalizedCloseDay;
 
             // Extract account closed date components
-            closeDay = accountClosed.getDayOfTheWeek();
+            closeDay = accountClosed.getDayOfWeek();
             closeMonthName = accountClosed.getMonthName();
             closeDayNum = accountClosed.getDay();
             closeYear = accountClosed.getYear();
