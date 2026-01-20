@@ -4,6 +4,7 @@ package ca.bcit.comp2522.bank;
  * Represents a person's name with first and last components.
  *
  * @author Ziad Malik
+ * @author  Evan Tang
  * @version 1.0
  */
 public final class Name {
@@ -11,16 +12,17 @@ public final class Name {
     private final String last;
 
     // Symbolic constant for maximum name length validation
-    private static final int MAX_NAME_LENGTH = 45;
+    private static final int MAX_NAME_LENGTH = 76;
 
     /**
      * Constructs a Name object with the specified first and last names.
      *
      * @param first the first name
      * @param last the last name
-     * @throws IllegalArgumentException if first or last name is null, blank, too long, or contains "admin"
-     */
-    public Name(final String first, final String last) {
+     * @throws IllegalArgumentException if first or last name is not valid
+     * */
+    public Name(final String first,
+                final String last) {
         validateName(first, last);
         this.first = first;
         this.last = last;

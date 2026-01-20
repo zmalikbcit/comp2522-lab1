@@ -5,6 +5,7 @@ package ca.bcit.comp2522.bank;
  * Manages deposits, withdrawals, and account details for a bank client.
  *
  * @author Ziad Malik
+ * @author Evan Tang
  * @version 1.0
  */
 public class BankAccount {
@@ -93,7 +94,8 @@ public class BankAccount {
      * @param pinToMatch the PIN to verify
      * @throws IllegalArgumentException if amount is invalid, PIN is incorrect, or insufficient funds
      */
-    public void withdraw(final double amountUsd, final int pinToMatch) {
+    public void withdraw(final double amountUsd,
+                         final int pinToMatch) {
         // Verify PIN matches before allowing withdrawal
         if (pinToMatch != pin) {
             throw new IllegalArgumentException("Invalid PIN");
@@ -115,7 +117,7 @@ public class BankAccount {
         final int openDayNum;
         final int openYear;
         final String details;
-        final int balanceInt;
+        final double balanceInt;
         final String capitalizedOpenDay;
 
         // Determine verb tense based on whether client is alive
