@@ -4,6 +4,7 @@ package ca.bcit.comp2522.bank;
  * Main class to demonstrate the banking system with historical figures.
  *
  * @author Ziad Malik
+ * @author Evan Tang
  * @version 1.0
  */
 public class Main {
@@ -27,10 +28,12 @@ public class Main {
         einsteinBirth = new Date(1879, 3, 14);
         einsteinDeath = new Date(1955, 4, 18);
         einsteinSignup = new Date(1900, 1, 1);
-        einsteinClient = new BankClient(einsteinName, einsteinBirth, einsteinDeath, "abc123", einsteinSignup);
+        einsteinClient = new BankClient(einsteinName, einsteinBirth,
+                einsteinDeath, "abc123", einsteinSignup);
         einsteinAccountOpened = new Date(1900, 1, 1);
         einsteinAccountClosed = new Date(1950, 10, 14);
-        einsteinAccount = new BankAccount(einsteinClient, 1000, 3141, "abc123", einsteinAccountOpened, einsteinAccountClosed);
+        einsteinAccount = new BankAccount(einsteinClient, 1000, 3141,
+                "abc123", einsteinAccountOpened, einsteinAccountClosed);
 
         System.out.println(einsteinName.getInitials());
         System.out.println(einsteinName.getFullName());
@@ -53,9 +56,11 @@ public class Main {
         mandelaBirth = new Date(1918, 7, 18);
         mandelaDeath = new Date(2013, 12, 5);
         mandelaSignup = new Date(1994, 5, 10);
-        mandelaClient = new BankClient(mandelaName, mandelaBirth, mandelaDeath, "654321", mandelaSignup);
+        mandelaClient = new BankClient(mandelaName, mandelaBirth,
+                mandelaDeath, "654321", mandelaSignup);
         mandelaAccountOpened = new Date(1994, 5, 10);
-        mandelaAccount = new BankAccount(mandelaClient, 2000, 4664, "654321", mandelaAccountOpened, null);
+        mandelaAccount = new BankAccount(mandelaClient, 2000, 4664,
+                "654321", mandelaAccountOpened, null);
 
         System.out.println(mandelaName.getInitials());
         System.out.println(mandelaName.getFullName());
@@ -79,10 +84,12 @@ public class Main {
         kahloBirth = new Date(1907, 7, 6);
         kahloDeath = new Date(1954, 7, 13);
         kahloSignup = new Date(1940, 1, 1);
-        kahloClient = new BankClient(kahloName, kahloBirth, kahloDeath, "frd123", kahloSignup);
+        kahloClient = new BankClient(kahloName, kahloBirth,
+                kahloDeath, "frd123", kahloSignup);
         kahloAccountOpened = new Date(1940, 1, 1);
         kahloAccountClosed = new Date(1954, 7, 13);
-        kahloAccount = new BankAccount(kahloClient, 500, 1907, "frd123", kahloAccountOpened, kahloAccountClosed);
+        kahloAccount = new BankAccount(kahloClient, 500, 1907,
+                "frd123", kahloAccountOpened, kahloAccountClosed);
 
         System.out.println(kahloName.getInitials());
         System.out.println(kahloName.getFullName());
@@ -103,9 +110,11 @@ public class Main {
         chanName = new Name("Jackie", "Chan");
         chanBirth = new Date(1954, 4, 7);
         chanSignup = new Date(1980, 10, 1);
-        chanClient = new BankClient(chanName, chanBirth, null, "chan789", chanSignup);
+        chanClient = new BankClient(chanName, chanBirth,
+                null, "chan789", chanSignup);
         chanAccountOpened = new Date(1980, 10, 1);
-        chanAccount = new BankAccount(chanClient, 3000, 1954, "chan789", chanAccountOpened, null);
+        chanAccount = new BankAccount(chanClient, 3000, 1954,
+                "chan789", chanAccountOpened, null);
 
         System.out.println(chanName.getInitials());
         System.out.println(chanName.getFullName());

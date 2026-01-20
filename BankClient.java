@@ -5,6 +5,7 @@ package ca.bcit.comp2522.bank;
  * Stores the client's name, birth/death dates, unique ID, and signup date.
  *
  * @author Ziad Malik
+ * @author Evan Tang
  * @version 1.0
  */
 public class BankClient {
