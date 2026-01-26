@@ -7,23 +7,26 @@ package ca.bcit.comp2522.bank;
  * @author  Evan Tang
  * @version 1.0
  */
-public final class Name {
+public final class Name
+{
+    private static final int MAX_NAME_LENGTH = 76;
+
     private final String first;
     private final String last;
 
-    // Symbolic constant for maximum name length validation
-    private static final int MAX_NAME_LENGTH = 76;
 
     /**
      * Constructs a Name object with the specified first and last names.
      *
      * @param first the first name
      * @param last the last name
-     * @throws IllegalArgumentException if first or last name is not valid
-     * */
+     */
     public Name(final String first,
-                final String last) {
-        validateName(first, last);
+                final String last)
+    {
+        validateName(first,
+                     last);
+
         this.first = first;
         this.last = last;
     }
@@ -51,7 +54,8 @@ public final class Name {
      *
      * @return the initials with periods in between
      */
-    public String getInitials(){
+    public String getInitials()
+    {
         final char firstInitial;
         final char lastInitial;
 
@@ -67,7 +71,8 @@ public final class Name {
      *
      * @return the formatted full name
      */
-    public String getFullName(){
+    public String getFullName()
+    {
         final String firstFormatted;
         final String lastFormatted;
 
@@ -83,11 +88,16 @@ public final class Name {
      *
      * @param first the first name to reverse
      * @param last the last name to reverse
+     *
      * @return the reversed name in the format "reversedLast reversedFirst"
      */
-    public static String getReverseName(final String first, final String last) {
+    public static String getReverseName(final String first,
+                                        final String last)
+    {
+
         final String reversedFirst;
         final String reversedLast;
+
         final StringBuilder builderFirst;
         final StringBuilder builderLast;
 
@@ -109,31 +119,37 @@ public final class Name {
      *
      * @param first the first name to validate
      * @param last the last name to validate
-     * @throws IllegalArgumentException if first or last name is null, empty, longer than 45 characters,
-     *                                  or contains the word "admin" in any case
      */
-    private static void validateName(final String first, final String last) {
-        if  (first == null || first.isBlank()) {
+    private static void validateName(final String first,
+                                     final String last)
+    {
+        if  (first == null || first.isBlank())
+        {
             throw new IllegalArgumentException("first cannot be null or empty");
         }
 
-        if (first.length() > MAX_NAME_LENGTH) {
-            throw new IllegalArgumentException("first cannot be longer than 45 characters");
+        if (first.length() > MAX_NAME_LENGTH)
+        {
+            throw new IllegalArgumentException("first cannot be longer than " + MAX_NAME_LENGTH + " characters");
         }
 
-        if (first.toLowerCase().contains("admin")){
+        if (first.toLowerCase().contains("admin"))
+        {
             throw new IllegalArgumentException("first cannot contain admin");
         }
 
-        if  (last == null || last.isBlank()) {
+        if  (last == null || last.isBlank())
+        {
             throw new IllegalArgumentException("last cannot be null or empty");
         }
 
-        if (last.length() > MAX_NAME_LENGTH) {
-            throw new IllegalArgumentException("last cannot be longer than 45 characters");
+        if (last.length() > MAX_NAME_LENGTH)
+        {
+            throw new IllegalArgumentException("last cannot be longer than " + MAX_NAME_LENGTH + " characters");
         }
 
-        if (last.toLowerCase().contains("admin")){
+        if (last.toLowerCase().contains("admin"))
+        {
             throw new IllegalArgumentException("last cannot contain admin");
         }
     }

@@ -8,10 +8,9 @@ package ca.bcit.comp2522.bank;
  * @author Evan Tang
  * @version 1.0
  */
-public class Date {
-    private final int year;
-    private final int month;
-    private final int day;
+public class Date
+{
+
 
     // Year validation constants
     private static final int MIN_YEAR = 1800;
@@ -43,8 +42,8 @@ public class Date {
     private static final int NOVEMBER = 11;
 
     // Month Code Constants
-    // jfmamjjasond: 144025036146
     /**
+     * jfmamjjasond: 144025036146
      * JANUARY and OCTOBER = 1
      * FEBRUARY, MARCH, NOVEMBER = 4
      * APRIL, JULY = 0;
@@ -84,14 +83,17 @@ public class Date {
     private static final int CENTURY_2000_OFFSET = 6;
     private static final int LEAP_YEAR_JAN_FEB_OFFSET = 6;
 
+
+    private final int year;
+    private final int month;
+    private final int day;
+
     /**
      * Constructs a Date object with the specified year, month, and day.
      *
      * @param year the year (must be between 1800 and 2026)
      * @param month the month (must be between 1 and 12)
      * @param day the day (must be valid for the given month and year)
-     *            
-     * @throws IllegalArgumentException if any parameter is invalid
      */
     public Date(final int year, 
                 final int month, 
@@ -137,7 +139,8 @@ public class Date {
      *
      * @return the date string in format YYYY-MM-DD
      */
-    public String getYyyyMmDd() {
+    public String getYyyyMmDd()
+    {
         final String yearStr;
         final String monthStr;
         final String dayStr;
@@ -165,20 +168,24 @@ public class Date {
 
     /**
      * Calculates and returns the day of the week for this date.
-     * Uses a specific algorithm for dates between 1800-2026.
+     * Uses a specific algorithm for dates between MIN_YEAR and MAX_YEAR.
      *
      * @return the day of the week as a string
      */
-    public String getDayOfWeek() {
+    public String getDayOfWeek()
+    {
         final int lastTwoDigits;
+
         final int centuryOffset;
         final int leapYearOffset;
+
         final int step1;
         final int step2;
         final int step3;
         final int step4;
         final int step5;
         final int step6;
+
         final int dayCode;
 
         // Get last two digits of year (e.g., 1977 becomes 77)
@@ -198,7 +205,8 @@ public class Date {
 
         // Determine leap year offset for January and February only
         // If it's a leap year AND the month is Jan or Feb, add 6
-        if (isLeapYear(year) && (month == JANUARY || month == FEBRUARY)) {
+        if (isLeapYear(year) && (month == JANUARY || month == FEBRUARY))
+        {
             leapYearOffset = LEAP_YEAR_JAN_FEB_OFFSET;
         } else {
             leapYearOffset = 0;
@@ -234,24 +242,27 @@ public class Date {
      * @param year the year to validate
      * @param month the month to validate
      * @param day the day to validate
-     * @throws IllegalArgumentException if any parameter is invalid
      */
     private static void validateDate(final int year,
                                      final int month,
-                                     final int day) {
+                                     final int day)
+    {
         // Validate year is within acceptable range
-        if (year < MIN_YEAR || year > MAX_YEAR) {
-            throw new IllegalArgumentException("Year must be between Eighteenth Century and the Current Year");
+        if (year < MIN_YEAR || year > MAX_YEAR)
+        {
+            throw new IllegalArgumentException("Year must be between " + MIN_YEAR + " and the " + MAX_YEAR);
         }
 
         // Validate month is between JANUARY and DECEMBER
-        if (month < JANUARY || month > DECEMBER) {
-            throw new IllegalArgumentException("Month must be between JANUARY and DECEMBER");
+        if (month < JANUARY || month > DECEMBER)
+        {
+            throw new IllegalArgumentException("Month must be between " + JANUARY + " and " + DECEMBER);
         }
 
         // Validate day is at least 1
-        if (day < MIN_DAY) {
-            throw new IllegalArgumentException("Day must be at least 1");
+        if (day < MIN_DAY)
+        {
+            throw new IllegalArgumentException("Day must be at least " + MIN_DAY);
         }
 
         // Get the maximum valid day for this specific month and year
@@ -259,7 +270,8 @@ public class Date {
         maxDaysInMonth = getMaxDaysInMonth(month, year);
 
         // Validate day doesn't exceed maximum for the month
-        if (day > maxDaysInMonth) {
+        if (day > maxDaysInMonth)
+        {
             throw new IllegalArgumentException("Day must be valid for the given month and year");
         }
     }
@@ -271,9 +283,12 @@ public class Date {
      * @param month the month
      * @param year the year
      * @return the maximum number of days in the month
+     *
+     * @throws IllegalArgumentException throw exception if month is greater than DECEMBER or less than JANUARY
      */
     private static int getMaxDaysInMonth(final int month,
-                                         final int year) {
+                                         final int year)
+    {
         final int maxDays;
 
         // February has special handling for leap years
@@ -282,16 +297,27 @@ public class Date {
             if (isLeapYear(year))
             {
                 maxDays = DAYS_IN_FEB_LEAP;
-            } else
+            }
+            else
             {
                 maxDays = DAYS_IN_FEB_NORMAL;
             }
-        } else if (month == APRIL || month == JUNE ||
+        }
+        else if (month == APRIL || month == JUNE ||
                 month == SEPTEMBER || month == NOVEMBER)
         {
             // April, June, September, November have 30 days
             maxDays = DAYS_IN_SHORT_MONTH;
-        } else
+        }
+        else if (month > DECEMBER)
+        {
+            throw new IllegalArgumentException("Month cannot be greater than " + DECEMBER);
+        }
+        else if (month < JANUARY)
+        {
+            throw new IllegalArgumentException("Month cannot be lesser than " + JANUARY);
+        }
+        else
         {
             // January, March, May, July, August, October, December have 31 days
             maxDays = DAYS_IN_LONG_MONTH;
@@ -314,15 +340,18 @@ public class Date {
         if (year % QUAD_CENTURY_DIVISOR == 0)
         {
              leap = true;
-        } else if (year % CENTURY_YEAR_DIVISOR == 0)
+        }
+        else if (year % CENTURY_YEAR_DIVISOR == 0)
         {
             // Divisible by 100 but not 400 (these are NOT leap years)
              leap = false;
-        } else if (year % LEAP_YEAR_DIVISOR == 0)
+        }
+        else if (year % LEAP_YEAR_DIVISOR == 0)
         {
             // Divisible by 4 but not 100 (these ARE leap years)
              leap = true;
-        } else
+        }
+        else
         {
             // Not divisible by 4 (these are NOT leap years)
              leap = false;
@@ -335,12 +364,15 @@ public class Date {
      * Gets the month name for a given month number.
      * This is a helper method used by the public getMonthName() instance method.
      *
-     * @param month the month must be between January and December
-     * @return the month name (e.g., "January", "February")
+     * @param month the month must be JANUARY and DECEMBER
+     * @return the month name
+     *
+     * @throws IllegalArgumentException when month is not one of the known months
      */
     private static String getMonthName(final int month)
     {
-        return switch (month) {
+        return switch (month)
+        {
             case JANUARY -> "January";
             case FEBRUARY -> "February";
             case MARCH -> "March";
@@ -353,7 +385,7 @@ public class Date {
             case OCTOBER -> "October";
             case NOVEMBER -> "November";
             case DECEMBER -> "December";
-            default -> "Unknown";
+            default -> throw new IllegalArgumentException("Invalid month: " + month);
         };
     }
 
@@ -370,10 +402,13 @@ public class Date {
      *
      * @param month the month
      * @return the month code
+     *
+     * @throws IllegalArgumentException when month does not correlate with its month code
      */
     private static int getMonthCode(final int month)
     {
-        return switch (month) {
+        return switch (month)
+        {
             case JANUARY, OCTOBER -> JAN_OCT_CODE;
             case FEBRUARY, MARCH, NOVEMBER -> FEB_MAR_NOV_CODE;
             case APRIL, JULY -> APR_JULY_CODE;
@@ -381,19 +416,22 @@ public class Date {
             case JUNE -> JUNE_CODE;
             case AUGUST -> AUG_CODE;
             case SEPTEMBER, DECEMBER -> SEP_DEC_CODE;
-            default -> 0;
+            default -> throw new IllegalArgumentException("Invalid month: " + month);
         };
     }
 
     /**
      * Converts a day code to a day name.
      *
-* @param dayCode the day code correlates to the days of the week from Saturday to Friday
+     * @param dayCode the day code correlates to the days of the week from SATURDAY to FRIDAY
      * @return the day name in lowercase
+     *
+     * @throws IllegalArgumentException when day does not correlate with dayCode
      */
     private static String getDayName(final int dayCode)
     {
-        return switch (dayCode) {
+        return switch (dayCode)
+        {
             case SATURDAY -> "Saturday";
             case SUNDAY -> "Sunday";
             case MONDAY -> "Monday";
@@ -401,7 +439,7 @@ public class Date {
             case WEDNESDAY -> "Wednesday";
             case THURSDAY -> "Thursday";
             case FRIDAY -> "Friday";
-            default -> "unknown";
+            default -> throw new IllegalArgumentException("Invalid dayCode: " + dayCode);
         };
     }
 }
